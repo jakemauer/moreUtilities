@@ -342,18 +342,29 @@ class Moreutilities{
 		}
 	}
 
-	public function cache_buster_no_query()
+	public function cache_buster_file()
 	{
-		$this->EE->load->helper('file');
-		
-		//Cache buster file already exists?  If so, read it and return it, else create it
-		if($cache_buster_time = read_file(APPPATH."cache/page_cache/cache_buster")){
-			return $cache_buster_time;
-		}else{
+		$env = $this->EE->TMPL->fetch_param('environment');
+		$filename = $this->EE->TMPL->fetch_param('filename');
+		$filetype = "." . $this->EE->TMPL->fetch_param('filetype');
+
+		if ($env == "staging" || $env == "production" || $env = NULL) {
 			
-			$new_time = time();
-			write_file(APPPATH."cache/page_cache/cache_buster", $new_time);
-			return $new_time;
+			$this->EE->load->helper('file');
+			
+			//Cache buster file already exists?  If so, read it and return it, else create it
+			if($cache_buster_time = read_file(APPPATH."cache/page_cache/cache_buster")){
+				return $filename . "-cb" . $cache_buster_time . $filetype;
+			
+			}else{
+				
+				$new_time = time();
+				write_file(APPPATH."cache/page_cache/cache_buster", $new_time);
+				return $filename . "-cb" . $new_time . $filetype;
+			
+			}
+		} else {
+			return $filename . $filetype;
 		}
 	}
 	

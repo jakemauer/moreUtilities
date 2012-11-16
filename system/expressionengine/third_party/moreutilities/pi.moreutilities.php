@@ -2,8 +2,8 @@
 
 $plugin_info = array(
 						'pi_name'			=> 'moreUtilities',
-						'pi_version'		=> '1.1',
-						'pi_author'			=> 'Christopher Imrie',
+						'pi_version'		=> '1.2',
+						'pi_author'			=> 'Christopher Imrie, Jake Mauer',
 						'pi_author_url'		=> 'http://moresoda.co.uk/',
 						'pi_description'	=> 'ExpressionEngine 2.0 utility tags for use in templates.'
 					);
@@ -339,6 +339,21 @@ class Moreutilities{
 			$new_time = time();
 			write_file(APPPATH."cache/page_cache/cache_buster", $new_time);
 			return "?".$new_time;
+		}
+	}
+
+	public function cache_buster_no_query()
+	{
+		$this->EE->load->helper('file');
+		
+		//Cache buster file already exists?  If so, read it and return it, else create it
+		if($cache_buster_time = read_file(APPPATH."cache/page_cache/cache_buster")){
+			return $cache_buster_time;
+		}else{
+			
+			$new_time = time();
+			write_file(APPPATH."cache/page_cache/cache_buster", $new_time);
+			return $new_time;
 		}
 	}
 	
